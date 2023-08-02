@@ -1,0 +1,14 @@
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/install/strip.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/install/local.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/install.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/list_install_components.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/rebuild_cache.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/edit_cache.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/CMakeFiles/day00.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/install/strip.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/install/local.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/install.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/list_install_components.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/rebuild_cache.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/edit_cache.dir
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/flutter/CMakeFiles/flutter_assemble.dir

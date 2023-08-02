@@ -1,0 +1,12 @@
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/day00
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/icudtl.dat
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/kernel_blob.bin
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/version.json
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.json
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/FontManifest.json
+/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
