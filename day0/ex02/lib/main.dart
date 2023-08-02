@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'buttons.dart' as buttons;
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Calculator'),
@@ -30,18 +31,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String text = "Hello World";
-  final Map<String, String> textMap = {
-    "Hello World": "Please press the button below",
-    "Please press the button below": "Hello World",
-  };
-
-  void _pressMe() {
-    text = textMap[text]!;
-    setState(() {});
-    // ignore: avoid_print
-    print("Button Pressed");
-  }
+  String userInput = '0';
+  String calculatorOutput = '0';
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +44,33 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              text,
-            ),
-            TextButton(onPressed: _pressMe, child: const Text('[				x				]')),
+          children: [
+            Expanded(
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.black45,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(userInput,
+                              style: const TextStyle(
+                                fontSize: 35,
+                              )),
+                          Text(calculatorOutput,
+                              style: const TextStyle(
+                                fontSize: 35,
+                              )),
+                        ]))),
+            Expanded(
+                flex: 2,
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.grey,
+                    child: GridView.count(
+                      crossAxisCount: 5,
+                      children: buttons.array,
+                    ))),
           ],
         ),
       ),
