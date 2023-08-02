@@ -31,7 +31,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(
+	  	title: 'Calculator'
+
+	  ),
     );
   }
 }
@@ -55,17 +58,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+//variables
+  String text = "Hello World";
+  final Map<String, String> textMap = {
+    "Hello World": "Please press the button below",
+    "Please press the button below": "Hello World",
+  };
+//variables end
+
+// methods
+  void _pressMe() {
+    text = textMap[text]!;
+    setState(() {});
+    // ignore: avoid_print
+    print("Button Pressed");
   }
 
   @override
@@ -85,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+		centerTitle: true,
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -105,21 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              text,
             ),
+            TextButton(onPressed: _pressMe, child: const Text('[				x				]')),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
