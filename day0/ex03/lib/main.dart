@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           childAspectRatio: (itemWidth / itemHeight),
                           crossAxisCount: 5,
                         ),
-                        children: module.CalculatorButtons.array(),
+                        children: module.CalculatorButtons.array(userInput, calculatorOutput),
                       ),
                     ))),
           ],

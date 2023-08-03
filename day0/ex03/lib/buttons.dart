@@ -6,25 +6,10 @@ class CalculatorButtons {
   static var crossAxisCount = 5;
 
   static List<String> symbols_ = [
-    '7',
-    '8',
-    '9',
-    'C',
-    'AC',
-    '4',
-    '5',
-    '6',
-    '+',
-    '-',
-    '1',
-    '2',
-    '3',
-    'x',
-    '/',
-    '0',
-    '.',
-    '00',
-    '='
+    '7', '8', '9', 'C', 'AC',
+    '4', '5', '6', '+', '-',
+    '1', '2', '3', 'x', '/',
+    '0', '.', '00', '='
   ];
 
   static var style_ = ButtonStyle(
@@ -47,13 +32,14 @@ class CalculatorButtons {
     ),
   );
 
-  static List<Widget> array() {
+  static List<Widget> array(String userInput, String calculatorOutput) {
     return [
       ...symbols_.map(
         (operator) => ElevatedButton(
           style: style_,
           onPressed: () {
-            print(operator);
+			  userInput += operator;
+			  print(userInput);
           },
           child: Text(operator),
         ),
