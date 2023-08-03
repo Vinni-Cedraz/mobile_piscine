@@ -1,5 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'buttons.dart' as module;
+import 'buttons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,8 +9,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
+// This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,8 +32,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String userInput = '0';
-  String calculatorOutput = '0';
+  DisplayStreamWrapper displayStream = DisplayStreamWrapper(
+    input: 'hello world',
+    output: 1232345,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(userInput,
+                          Text(displayStream.input,
                               style: const TextStyle(
                                 fontSize: 35,
                               )),
-                          Text(calculatorOutput,
+                          Text(displayStream.output.toString(),
                               style: const TextStyle(
                                 fontSize: 35,
                               )),
@@ -79,7 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           childAspectRatio: (itemWidth / itemHeight),
                           crossAxisCount: 5,
                         ),
-                        children: module.CalculatorButtons.array(userInput, calculatorOutput),
+                        children: CalculatorButtons.array((() {
+                        }), displayStream),
                       ),
                     ))),
           ],
