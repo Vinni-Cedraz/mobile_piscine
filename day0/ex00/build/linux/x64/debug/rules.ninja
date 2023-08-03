@@ -42,7 +42,7 @@ rule CXX_EXECUTABLE_LINKER__day00
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake -S/nfs/homes/vcedraz-/mobile_piscine/day00/linux -B/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug
+  command = /usr/bin/cmake -S/nfs/homes/vcedraz-/mobile_piscine/day0/ex00/linux -B/nfs/homes/vcedraz-/mobile_piscine/day0/ex00/build/linux/x64/debug
   description = Re-running CMake...
   generator = 1
 

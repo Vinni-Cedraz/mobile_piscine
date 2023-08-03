@@ -1,8 +1,8 @@
-# Install script for directory: /nfs/homes/vcedraz-/mobile_piscine/day00/linux/flutter
+# Install script for directory: /nfs/homes/vcedraz-/mobile_piscine/day0/ex00/linux/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/nfs/homes/vcedraz-/mobile_piscine/day00/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/nfs/homes/vcedraz-/mobile_piscine/day0/ex00/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
