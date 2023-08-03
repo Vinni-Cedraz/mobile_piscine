@@ -2,61 +2,62 @@
 
 import 'package:flutter/material.dart';
 
-List<String> operators = ['+', '-', '*', '/'];
-var style_ = ButtonStyle(
-  textStyle: MaterialStateProperty.all<TextStyle>(
-    const TextStyle(color: Colors.white),
-  ),
-  backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
-  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-  ),
-);
+class CalculatorButtons {
+  static var crossAxisCount = 5;
 
-List<Widget> array = [
-  for (int i = 0; i < 10; i++)
-    ElevatedButton(
-      style: style_,
-      onPressed: () {
-        print('$i');
-      },
-      child: Text('$i'),
+  static List<String> symbols_ = [
+    '7',
+    '8',
+    '9',
+    'C',
+    'AC',
+    '4',
+    '5',
+    '6',
+    '+',
+    '-',
+    '1',
+    '2',
+    '3',
+    'x',
+    '/',
+    '0',
+    '.',
+    '00',
+    '='
+  ];
+
+  static var style_ = ButtonStyle(
+    textStyle: MaterialStateProperty.all<TextStyle>(
+      const TextStyle(color: Colors.white),
     ),
-  ElevatedButton(
-    style: style_,
-    onPressed: () {
-      print('.');
-    },
-    child: const Text('.'),
-  ),
-  ElevatedButton(
-    style: style_,
-    onPressed: () {
-      print('AC');
-    },
-    child: const Text('AC'),
-  ),
-  ElevatedButton(
-    style: style_,
-    onPressed: () {
-      print('C');
-    },
-    child: const Text('C'),
-  ),
-  ...operators.map(
-    (operator) => ElevatedButton(
-      style: style_,
-      onPressed: () {
-        print(operator);
-      },
-      child: Text(operator),
+    backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
     ),
-  ),
-  ElevatedButton(
-    style: style_,
-    onPressed: () {
-      print('=');
-    },
-    child: const Text('='),
-  ),
-];
+  );
+
+  static var styleForEqualButton = ButtonStyle(
+    textStyle: MaterialStateProperty.all<TextStyle>(
+      const TextStyle(color: Colors.white),
+    ),
+    backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
+    ),
+  );
+
+  static List<Widget> array() {
+    return [
+      ...symbols_.map(
+        (operator) => ElevatedButton(
+          style: style_,
+          onPressed: () {
+            print(operator);
+          },
+          child: Text(operator),
+        ),
+      ),
+    ];
+  }
+}

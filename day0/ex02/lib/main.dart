@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'buttons.dart' as buttons;
+import 'buttons.dart' as module;
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +36,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double itemHeight =
+        (((MediaQuery.of(context).size.height - kToolbarHeight - 24))) / 3.05;
+    final double itemWidth = MediaQuery.of(context).size.width / 2;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -63,13 +66,21 @@ class _MyHomePageState extends State<MyHomePage> {
                               )),
                         ]))),
             Expanded(
-                flex: 2,
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     color: Colors.grey,
-                    child: GridView.count(
-                      crossAxisCount: 5,
-                      children: buttons.array,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).padding.top -
+                          kToolbarHeight * 0.5,
+                      child: GridView(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: (itemWidth / itemHeight),
+                          crossAxisCount: 5,
+                        ),
+                        children: module.CalculatorButtons.array(),
+                      ),
                     ))),
           ],
         ),
