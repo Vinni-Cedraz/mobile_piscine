@@ -32,9 +32,31 @@ class _MyGeolocatorApp extends State<MyGeolocatorApp> {
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 3,
-				initialIndex: 0,
+        initialIndex: 0,
         child: Scaffold(
-          appBar: AppBar(
+          appBar: TabBar(
+            tabs: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  // Add search functionality here
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.help),
+                onPressed: () {
+                  // ignore: avoid_print
+                  print('Geolocator');
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.location_on),
+                onPressed: () {
+                  // ignore: avoid_print
+                  print('Geolocator');
+                },
+              ),
+            ],
           ),
           body: const TabBarView(
             children: [
