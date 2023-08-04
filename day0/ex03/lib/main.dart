@@ -1,7 +1,32 @@
 // ignore_for_file: avoid_print
 
+import 'package:function_tree/function_tree.dart';
 import 'package:flutter/material.dart';
-import 'buttons.dart';
+
+class DisplayStreamWrapper {
+  String input;
+  num output;
+  DisplayStreamWrapper({required this.input, required this.output});
+}
+
+var crossAxisCount = 5;
+
+var style_ = ButtonStyle(
+  textStyle: MaterialStateProperty.all<TextStyle>(
+    const TextStyle(color: Colors.white),
+  ),
+  backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+  ),
+);
+
+List<String> symbols_ = [
+  '7', '8', '9', 'C', 'AC',
+  '4', '5', '6', '+', '-',
+  '1', '2', '3', '*', '/',
+  '0', '.', '00', '=', ' ',
+];
 
 void main() {
   runApp(const MyApp());
@@ -32,10 +57,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DisplayStreamWrapper displayStream = DisplayStreamWrapper(
-    input: 'hello world',
-    output: 1232345,
-  );
+  String input = '0';
+  num output = 0;
+
+  void calculatorHandler(String operator_) {
+    setState(() {
+      switch (operator_) {
+        case '=':
+          output = input.interpret();
+        case 'AC':
+          input = '0';
+          output = 0; // Change 0 to '0' as output is of type String.
+        case 'C':
+          if (input.length > 1) {
+            input = input.substring(0, input.length - 1);
+          } else {
+            input = '0';
+          }
+        case '0':
+          if (input == '0' &&
+              int.parse(operator_) >= 1 &&
+              int.parse(operator_) <= 9) {
+            input = operator_;
+          } else if (input == '0' && operator_ == '0') {
+            return;
+          } else {
+            input = '$input$operator_';
+          }
+        default:
+          if (input == '0') {
+            input = operator_;
+          } else {
+            input = '$input$operator_';
+          }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(displayStream.input,
+                          Text(input,
                               style: const TextStyle(
                                 fontSize: 35,
                               )),
-                          Text(displayStream.output.toString(),
+                          Text(output.toString(),
                               style: const TextStyle(
                                 fontSize: 35,
                               )),
@@ -78,13 +135,22 @@ class _MyHomePageState extends State<MyHomePage> {
                           MediaQuery.of(context).padding.top -
                           kToolbarHeight * 0.5,
                       child: GridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: (itemWidth / itemHeight),
-                          crossAxisCount: 5,
-                        ),
-                        children: CalculatorButtons.array((() {
-                        }), displayStream),
-                      ),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: (itemWidth / itemHeight),
+                            crossAxisCount: 5,
+                          ),
+                          children: [
+                            ...symbols_.map(
+                              (operator_) => ElevatedButton(
+                                style: style_,
+                                onPressed: () {
+                                  calculatorHandler(operator_);
+                                },
+                                child: Text(operator_),
+                              ),
+                            ),
+                          ]),
                     ))),
           ],
         ),
