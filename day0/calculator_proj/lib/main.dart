@@ -13,7 +13,7 @@ var crossAxisCount = 5;
 
 var style_ = ButtonStyle(
   textStyle: MaterialStateProperty.all<TextStyle>(
-    const TextStyle(color: Colors.black, fontSize: 30),
+    const TextStyle(fontSize: 30),
   ),
   backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -22,10 +22,26 @@ var style_ = ButtonStyle(
 );
 
 List<String> symbols_ = [
-  '7', '8', '9', 'C', 'AC',
-  '4', '5', '6', '+', '-',
-  '1', '2', '3', '*', '/',
-  '0', '.', '00', '=', ' ',
+  '7',
+  '8',
+  '9',
+  'C',
+  'AC',
+  '4',
+  '5',
+  '6',
+  '+',
+  '-',
+  '1',
+  '2',
+  '3',
+  '*',
+  '/',
+  '0',
+  '.',
+  '00',
+  '=',
+  ' ',
 ];
 
 void main() {
@@ -63,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void calculatorHandler(String operator_) {
     setState(() {
       switch (operator_) {
+        case ' ':
+          return;
         case '=':
           output = input.interpret();
           break;
