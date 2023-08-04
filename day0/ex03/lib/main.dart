@@ -13,7 +13,7 @@ var crossAxisCount = 5;
 
 var style_ = ButtonStyle(
   textStyle: MaterialStateProperty.all<TextStyle>(
-    const TextStyle(color: Colors.white),
+    const TextStyle(color: Colors.black, fontSize: 30),
   ),
   backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Calculator'),
@@ -65,15 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
       switch (operator_) {
         case '=':
           output = input.interpret();
+          break;
         case 'AC':
           input = '0';
           output = 0; // Change 0 to '0' as output is of type String.
+          break;
         case 'C':
           if (input.length > 1) {
             input = input.substring(0, input.length - 1);
           } else {
             input = '0';
           }
+          break;
         case '0':
           if (input == '0' &&
               int.parse(operator_) >= 1 &&
@@ -84,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             input = '$input$operator_';
           }
+          break;
         default:
           if (input == '0') {
             input = operator_;
