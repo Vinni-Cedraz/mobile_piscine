@@ -28,60 +28,78 @@ class MyGeolocatorApp extends StatefulWidget {
 }
 
 class _MyGeolocatorApp extends State<MyGeolocatorApp> {
+  String lastSearchText = '';
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
-        initialIndex: 0,
-        child: Scaffold(
-          appBar: TabBar(
-            tabs: [
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {
-                  // Add search functionality here
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.help),
-                onPressed: () {
-                  // ignore: avoid_print
-                  print('Geolocator');
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.location_on),
-                onPressed: () {
-                  // ignore: avoid_print
-                  print('Geolocator');
-                },
-              ),
-            ],
-          ),
-          body: const TabBarView(
-            children: [
-              TabContent(title: 'Currently'),
-              TabContent(title: 'Today'),
-              TabContent(title: 'Weekly'),
-            ],
-          ),
-          bottomNavigationBar: const BottomAppBar(
-            child: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.calendar_today), text: 'Currently'),
-                Tab(icon: Icon(Icons.today), text: 'Today'),
-                Tab(icon: Icon(Icons.view_week), text: 'Weekly'),
-              ],
+      length: 3,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: topBar(),
+        body: TabBarView(
+          children: [
+            TabContent(title: 'Currently\n$lastSearchText'),
+            TabContent(title: 'Today\n$lastSearchText'),
+            TabContent(title: 'Weekly\n$lastSearchText'),
+          ],
+        ),
+        bottomNavigationBar: bottomBar(),
+      ),
+    );
+  }
+
+  AppBar topBar() {
+    return AppBar(
+      title: Row(
+        children: topRowWidgets(),
+      ),
+    );
+  }
+
+  List<Widget> topRowWidgets() => [
+        Expanded(
+          flex: 2,
+          child: TextField(
+            onChanged: (text) {
+              setState(() {
+                lastSearchText = text;
+              });
+            },
+            decoration: const InputDecoration(
+              hintText: 'Search...',
+              icon: Icon(Icons.search),
             ),
           ),
-        ));
+        ),
+        Expanded(
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                lastSearchText = 'Geolocator';
+              });
+            },
+            icon: const Icon(Icons.location_on),
+          ),
+        ),
+      ];
+
+  BottomAppBar bottomBar() {
+    return const BottomAppBar(
+        child: TabBar(
+      tabs: [
+        Tab(icon: Icon(Icons.calendar_today), text: 'Currently'),
+        Tab(icon: Icon(Icons.today), text: 'Today'),
+        Tab(icon: Icon(Icons.view_week), text: 'Weekly'),
+      ],
+    ));
   }
 }
 
 class TabContent extends StatelessWidget {
   final String title;
 
-  const TabContent({super.key, required this.title});
+  const TabContent({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
