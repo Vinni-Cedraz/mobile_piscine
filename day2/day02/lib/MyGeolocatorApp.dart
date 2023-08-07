@@ -13,15 +13,13 @@ class MyGeolocatorApp extends StatefulWidget {
 
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   late Position _currentPosition;
+
   String lastSearchText = '';
 
   void _updateLastSearchText(String searchText) => setState(() {
         lastSearchText = searchText;
       });
 
-  void _updatePosition(Position searchText) => setState(() {
-        lastSearchText = '${searchText.latitude}, ${searchText.longitude}';
-      });
 
   @override
   void initState() {
@@ -34,6 +32,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
       Position position = await geolib.determinePosition();
       setState(() {
         _currentPosition = position;
+        lastSearchText = '${_currentPosition.latitude}, ${_currentPosition.longitude}';
       });
     } catch (e) {
       print('Error: $e');
@@ -43,8 +42,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   @override
   Widget build(BuildContext context) => GeolocatorAppTabController(
         lastSearchText: lastSearchText,
-        currentPosition: _currentPosition,
-        updatePosition: _updatePosition,
+        updatePosition: _getCurrentLocation,
         updateLastSearchText: _updateLastSearchText,
       ).tabController;
 }
