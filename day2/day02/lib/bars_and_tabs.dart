@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'tabcontent.dart';
 
 class TopBar {
   final Function(String) updateLastSearchText;
+  final Function(Position) updatePosition;
+  final Position currentPosition;
   const TopBar({
     required this.updateLastSearchText,
+    required this.updatePosition,
+    required this.currentPosition,
   });
-  AppBar buildAppBar() =>
-      AppBar(title: TopRowWidgets(updateLastSearchText: updateLastSearchText));
+  AppBar buildAppBar() => AppBar(
+          title: TopRowWidgets(
+        updateLastSearchText: updateLastSearchText,
+        currentPosition: currentPosition,
+        updatePosition: updatePosition,
+      ));
 }
 
 class TopRowWidgets extends StatelessWidget {
   final Function(String) updateLastSearchText;
-  const TopRowWidgets({super.key, required this.updateLastSearchText});
+  final Function(Position) updatePosition;
+  final Position currentPosition;
+  const TopRowWidgets(
+      {super.key,
+      required this.updateLastSearchText,
+      required this.updatePosition,
+      required this.currentPosition});
   @override
   Widget build(BuildContext context) => Row(
         children: [
@@ -28,7 +43,7 @@ class TopRowWidgets extends StatelessWidget {
           ),
           Expanded(
             child: IconButton(
-              onPressed: () => updateLastSearchText('Geolocator'),
+              onPressed: () => updatePosition(currentPosition),
               icon: const Icon(Icons.location_on),
             ),
           ),
@@ -38,7 +53,8 @@ class TopRowWidgets extends StatelessWidget {
 
 class MiddleBarViews {
   final String lastSearchText;
-  MiddleBarViews({required this.lastSearchText});
+  final Position currentPosition;
+  MiddleBarViews({required this.lastSearchText, required this.currentPosition});
   TabBarView buildTabBarView() {
     return TabBarView(
       children: [

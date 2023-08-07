@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'weatherApp_proj.dart';
+import 'MyGeolocatorApp.dart';
 
 void main() {
   runApp(const MyApp());
