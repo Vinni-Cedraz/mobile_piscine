@@ -1,5 +1,6 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'tabcontent.dart';
 
 class TopBar {
   final Function(String) updateLastSearchText;
@@ -45,30 +46,4 @@ class TopRowWidgets extends StatelessWidget {
           ),
         ],
       );
-}
-
-class MiddleBarViews {
-  final String lastSearchText;
-  MiddleBarViews({required this.lastSearchText});
-  TabBarView buildTabBarView() {
-    return TabBarView(
-      children: [
-        TabContent(title: 'Currently\n$lastSearchText'),
-        TabContent(title: 'Today\n$lastSearchText'),
-        TabContent(title: 'Weekly\n$lastSearchText'),
-      ],
-    );
-  }
-}
-
-class BottomBar {
-  TabBar buildTabBar() {
-    return const TabBar(
-      tabs: [
-        Tab(icon: Icon(Icons.calendar_today), text: 'Currently'),
-        Tab(icon: Icon(Icons.today), text: 'Today'),
-        Tab(icon: Icon(Icons.view_week), text: 'Weekly'),
-      ],
-    );
-  }
 }

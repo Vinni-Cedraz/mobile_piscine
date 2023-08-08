@@ -3,7 +3,7 @@
 import 'package:geolocator/geolocator.dart';
 import 'determine_position.dart' as geolib;
 import 'package:flutter/material.dart';
-import 'geolocator_app_tab_controller.dart';
+import 'TabControllerGeoApp.dart';
 
 class MyGeolocatorApp extends StatefulWidget {
   const MyGeolocatorApp({super.key});
@@ -13,13 +13,10 @@ class MyGeolocatorApp extends StatefulWidget {
 
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   late Position _currentPosition;
-
   String lastSearchText = '';
-
   void _updateLastSearchText(String searchText) => setState(() {
         lastSearchText = searchText;
       });
-
 
   @override
   void initState() {
@@ -32,7 +29,8 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
       Position position = await geolib.determinePosition();
       setState(() {
         _currentPosition = position;
-        lastSearchText = '${_currentPosition.latitude}, ${_currentPosition.longitude}';
+        lastSearchText =
+            '${_currentPosition.latitude}, ${_currentPosition.longitude}';
       });
     } catch (e) {
       print('Error: $e');
@@ -40,7 +38,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   }
 
   @override
-  Widget build(BuildContext context) => GeolocatorAppTabController(
+  Widget build(BuildContext context) => TabControllerGeoApp(
         lastSearchText: lastSearchText,
         updatePosition: _getCurrentLocation,
         updateLastSearchText: _updateLastSearchText,

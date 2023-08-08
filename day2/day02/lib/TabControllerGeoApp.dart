@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
-import 'bars_and_tabs.dart';
+// ignore_for_file: file_names
 
-class GeolocatorAppTabController {
+import 'package:flutter/material.dart';
+import 'TopBar.dart';
+import 'MiddleBarViews.dart';
+import 'BottomBar.dart';
+
+class TabControllerGeoApp {
   final String lastSearchText;
   final Function(String) updateLastSearchText;
   final Function() updatePosition;
-  GeolocatorAppTabController({
+  TabControllerGeoApp({
     required this.lastSearchText,
     required this.updateLastSearchText,
     required this.updatePosition,
