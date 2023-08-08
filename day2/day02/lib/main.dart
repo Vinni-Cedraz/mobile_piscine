@@ -1,7 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'MyGeolocatorApp.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
 }
 

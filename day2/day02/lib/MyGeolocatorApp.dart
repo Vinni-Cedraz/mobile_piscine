@@ -24,7 +24,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     _getCurrentLocation();
   }
 
-  Future<void> _getCurrentLocation() async {
+  _getCurrentLocation() async {
     try {
       Position position = await geolib.determinePosition();
       setState(() {
@@ -33,7 +33,9 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
             '${_currentPosition.latitude}, ${_currentPosition.longitude}';
       });
     } catch (e) {
-      print('Error: $e');
+      setState(() {
+        lastSearchText = e.toString();
+      });
     }
   }
 
