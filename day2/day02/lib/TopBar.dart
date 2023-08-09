@@ -2,6 +2,7 @@
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'dart:convert'; // Import for json decoding
 
 class TopBar {
@@ -33,9 +34,10 @@ class TopRowWidgets extends StatefulWidget {
 }
 
 class TopRowWidgetsState extends State<TopRowWidgets> {
-  List<dynamic> suggestions = []; // Store the suggestions from API
+  List<Map<String, dynamic>> suggestions = []; // Store the suggestions from API
+  late Map<String, dynamic> selectedSuggestion; // Store the selected suggestion
 
-  Future <void> _fetchSuggestions(String query) async {
+  Future<Iterable<dynamic>> _fetchSuggestions(String query) async {
     if (query.length >= 3) {
       final apiUrl = Uri.parse(
           'https://geocoding-api.open-meteo.com/v1/search?name=$query');
@@ -46,21 +48,16 @@ class TopRowWidgetsState extends State<TopRowWidgets> {
         final data = json.decode(response.body);
         final List<dynamic> results = data['results'];
 
-        setState(() {
-          suggestions = results
-              .map((result) => {
-                    'name': result['name'],
-                    'admin1': result['admin1'],
-                    'country': result['country'],
-                  })
-              .toList();
-        });
+        final suggestions = results
+            .map((result) =>
+                '${result['name']} ${result['admin1']} ${result['country']}')
+            .toList();
+
+        return suggestions;
       }
-    } else {
-      setState(() {
-        suggestions = [];
-      });
     }
+
+    return []; // Return an empty list when there are no suggestions
   }
 
   @override
@@ -68,13 +65,29 @@ class TopRowWidgetsState extends State<TopRowWidgets> {
     return Row(
       children: [
         Expanded(
-          flex: 2,
-          child: TextField(
-            onChanged: _fetchSuggestions, // Call the function on text change
-            decoration: const InputDecoration(
-              hintText: 'Search...',
-              icon: Icon(Icons.search),
+          flex: 5,
+          child: TypeAheadField(
+            textFieldConfiguration: const TextFieldConfiguration(
+              autofocus: true,
+              style: TextStyle(fontSize: 10),
+              decoration: InputDecoration(
+								border: OutlineInputBorder(),
+								// contentPadding: EdgeInsets.symmetric(vertical: 2),
+								),
             ),
+            suggestionsCallback: _fetchSuggestions,
+            itemBuilder: (context, suggestion) {
+              return Card(
+                child: Container(
+                  padding: const EdgeInsets.all(25),
+                  child: Text(suggestion.toString(),
+                      style: const TextStyle(fontSize: 12)),
+                ),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              widget.updateLastSearchText(suggestion);
+            },
           ),
         ),
         Expanded(
@@ -82,29 +95,7 @@ class TopRowWidgetsState extends State<TopRowWidgets> {
             onPressed: widget.updatePosition,
             icon: const Icon(Icons.location_on),
           ),
-        ),
-        DropdownButton<Map<String, dynamic>>(
-          items: suggestions
-              .map((suggestion) => DropdownMenuItem<Map<String, dynamic>>(
-                    value: suggestion,
-                    child: Text(suggestion['name']),
-                  ))
-              .toList(),
-          onChanged: (selectedSuggestion) {
-            // Handle selected suggestion
-            if (selectedSuggestion != null) {
-              final selectedName = selectedSuggestion['name'];
-              final selectedAdmin1 = selectedSuggestion['admin1'];
-              final selectedCountry = selectedSuggestion['country'];
-
-              // Update the text field with the selected suggestion
-              widget.updateLastSearchText(
-                  '$selectedName $selectedAdmin1 $selectedCountry');
-
-              // You can also do something with selectedAdmin1 and selectedCountry
-            }
-          },
-        ),
+        )
       ],
     );
   }
