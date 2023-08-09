@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'determine_position.dart' as geolib;
 import 'package:flutter/material.dart';
 import 'TabControllerGeoApp.dart';
+import 'ModuleForWeatherApi.dart';
 
 class MyGeolocatorApp extends StatefulWidget {
   const MyGeolocatorApp({super.key});
@@ -12,7 +13,6 @@ class MyGeolocatorApp extends StatefulWidget {
 }
 
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
-  late Position _currentPosition;
   String lastSearchText = '';
   void _updateLastSearchText(String searchText) => setState(() {
         lastSearchText = searchText;
@@ -28,15 +28,14 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     try {
       Position position = await geolib.determinePosition();
       setState(() {
-        _currentPosition = position;
-        lastSearchText =
-            '${_currentPosition.latitude}, ${_currentPosition.longitude}';
+        lastSearchText = WeatherByLocation(latitude: position.latitude, longitude: position.longitude).fetchTodayWeather()[0];
       });
     } catch (e) {
       setState(() {
         lastSearchText = e.toString();
       });
     }
+    print(lastSearchText);
   }
 
   @override

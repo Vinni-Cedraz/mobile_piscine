@@ -1,9 +1,7 @@
 // ignore_for_file: file_names, avoid_print
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'dart:convert'; // Import for json decoding
+import 'ModuleForGeocodingApi.dart';
 
 class TopBar {
   final Function(String) updateLastSearchText;
@@ -37,58 +35,19 @@ class TopRowWidgetsState extends State<TopRowWidgets> {
   List<Map<String, dynamic>> suggestions = []; // Store the suggestions from API
   late Map<String, dynamic> selectedSuggestion; // Store the selected suggestion
 
-  Future<Iterable<dynamic>> _fetchSuggestions(String query) async {
-    if (query.length >= 3) {
-      final apiUrl = Uri.parse(
-          'https://geocoding-api.open-meteo.com/v1/search?name=$query');
-
-      final response = await http.get(apiUrl);
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final List<dynamic> results = data['results'];
-
-        final suggestions = results
-            .map((result) =>
-                '${result['name']} ${result['admin1']} ${result['country']}')
-            .toList();
-
-        return suggestions;
-      }
-    }
-
-    return []; // Return an empty list when there are no suggestions
-  }
-
   @override
   Widget build(BuildContext context) {
+    double screenSize =
+        MediaQuery.of(context).size.height * MediaQuery.of(context).size.width;
+    double fontSize = screenSize * 0.00005;
     return Row(
       children: [
         Expanded(
           flex: 5,
-          child: TypeAheadField(
-            textFieldConfiguration: const TextFieldConfiguration(
-              autofocus: true,
-              style: TextStyle(fontSize: 10),
-              decoration: InputDecoration(
-								border: OutlineInputBorder(),
-								// contentPadding: EdgeInsets.symmetric(vertical: 2),
-								),
-            ),
-            suggestionsCallback: _fetchSuggestions,
-            itemBuilder: (context, suggestion) {
-              return Card(
-                child: Container(
-                  padding: const EdgeInsets.all(25),
-                  child: Text(suggestion.toString(),
-                      style: const TextStyle(fontSize: 12)),
-                ),
-              );
-            },
-            onSuggestionSelected: (suggestion) {
-              widget.updateLastSearchText(suggestion);
-            },
-          ),
+          child: AutosuggestionsFromGeocodingApi(
+                  updateLastSearchText: widget.updateLastSearchText,
+                  fontSize: fontSize)
+              .searchField(fontSize),
         ),
         Expanded(
           child: IconButton(
