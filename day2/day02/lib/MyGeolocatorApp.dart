@@ -14,6 +14,7 @@ class MyGeolocatorApp extends StatefulWidget {
 
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   String lastSearchText = '';
+  final Position position = await geolib.determinePosition();
   void _updateLastSearchText(String searchText) => setState(() {
         lastSearchText = searchText;
       });
@@ -26,7 +27,6 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
 
   _getCurrentLocation() async {
     try {
-      Position position = await geolib.determinePosition();
       setState(() {
         lastSearchText = WeatherByLocation(latitude: position.latitude, longitude: position.longitude).fetchTodayWeather()[0];
       });
