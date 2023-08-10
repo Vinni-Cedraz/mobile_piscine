@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'ModuleForGeocodingApi.dart';
 
 class TopBar {
-  final Function(String) updateLastSearchText;
+  final Function(Map<String, String>) updateLastSearchText;
   final Function() updatePosition;
   const TopBar({
     required this.updateLastSearchText,
@@ -18,7 +18,7 @@ class TopBar {
 }
 
 class TopRowWidgets extends StatefulWidget {
-  final Function(String) updateLastSearchText;
+  final Function(Map<String, String>) updateLastSearchText;
   final Function() updatePosition;
 
   const TopRowWidgets({

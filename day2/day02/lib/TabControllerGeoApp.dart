@@ -6,8 +6,8 @@ import 'MiddleBarViews.dart';
 import 'BottomBar.dart';
 
 class TabControllerGeoApp {
-  final String lastSearchText;
-  final Function(String) updateLastSearchText;
+  final Map<String, String> lastSearchText;
+  final Function(Map<String, String>) updateLastSearchText;
   final Function() updatePosition;
   TabControllerGeoApp({
     required this.lastSearchText,

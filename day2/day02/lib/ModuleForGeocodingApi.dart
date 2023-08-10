@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert'; // Import for json decoding
 
 class AutosuggestionsFromGeocodingApi {
-  final Function(String) updateLastSearchText;
+  final Function(Map<String, String>) updateLastSearchText;
   final double fontSize;
 
   const AutosuggestionsFromGeocodingApi({
@@ -38,7 +38,12 @@ class AutosuggestionsFromGeocodingApi {
         );
       },
       onSuggestionSelected: (suggestion) {
-        updateLastSearchText(suggestion);
+        Map<String, String> updatedSearchText = {
+          'currently': suggestion,
+          'today': suggestion,
+          'weekly': suggestion,
+        };
+        updateLastSearchText(updatedSearchText);
       },
     );
   }

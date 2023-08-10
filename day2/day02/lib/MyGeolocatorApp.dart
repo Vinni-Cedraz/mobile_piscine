@@ -13,11 +13,13 @@ class MyGeolocatorApp extends StatefulWidget {
 }
 
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
-  String lastSearchText = '';
-  final Position position = await geolib.determinePosition();
-  void _updateLastSearchText(String searchText) => setState(() {
-        lastSearchText = searchText;
-      });
+  Position? position;
+
+  Map<String, String> lastSearchText = {
+    'currently': "Current weather text goes here...",
+    'today': "Today's weather text goes here...",
+    'weekly': "Weekly weather text goes here...",
+  };
 
   @override
   void initState() {
@@ -25,17 +27,24 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     _getCurrentLocation();
   }
 
+  void _updateLastSearchText(Map<String, String> searchText) => setState(() {
+        lastSearchText = searchText;
+      });
+
   _getCurrentLocation() async {
+    position ??= await geolib.determinePosition();
     try {
+      final List<String> weatherToday = await WeatherByLocation(
+              latitude: position!.latitude, longitude: position!.longitude)
+          .fetchTodayWeather();
       setState(() {
-        lastSearchText = WeatherByLocation(latitude: position.latitude, longitude: position.longitude).fetchTodayWeather()[0];
+        lastSearchText['today'] = weatherToday.join('\n');
       });
     } catch (e) {
       setState(() {
-        lastSearchText = e.toString();
+        lastSearchText['today'] = e.toString();
       });
     }
-    print(lastSearchText);
   }
 
   @override
