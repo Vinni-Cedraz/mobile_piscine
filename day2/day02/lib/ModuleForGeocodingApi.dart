@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,64 @@ class LastSearchText {
   Map<String, String> get updatedSearchText => lastSearchText;
 }
 
+class DeterminePosition {
+  final String? name;
+  final String? admin1;
+  final String? country;
+
+  DeterminePosition({this.name, this.admin1, this.country});
+
+  Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw Exception('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      throw Exception(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    dynamic position = await Geolocator.getCurrentPosition();
+
+    if (name != null && admin1 != null && country != null) {
+      final apiUrl = Uri.parse(
+          'https://geocoding-api.open-meteo.com/v1/search?name=$name&count=10&language=en&format=json');
+
+      final response = await http.get(apiUrl);
+
+      final List<dynamic> results = json.decode(response.body)['results'];
+
+      for (final result in results) {
+        if (result['name'] == name &&
+            result['admin1'] == admin1 &&
+            result['country'] == country) {
+          final latitude = result['latitude'];
+          final longitude = result['longitude'];
+          position.longitude = longitude;
+          position.latitude = latitude;
+          break;
+        }
+      }
+      return position!; // Return the determined position here
+    }
+    return position!;
+  }
+}
+
 class AutosuggestionsFromGeocodingApi {
-  final Function(Map<String, String>) updateLastSearchText;
+  final Function(Map<String, String>, String suggestion) updateLastSearchText;
   final double fontSize;
 
   const AutosuggestionsFromGeocodingApi({
@@ -32,7 +89,7 @@ class AutosuggestionsFromGeocodingApi {
   void onSuggestionSelected(String suggestion) {
     Map<String, String> updatedSearchText =
         LastSearchText(suggestion).updatedSearchText;
-    updateLastSearchText(updatedSearchText);
+    updateLastSearchText(updatedSearchText, suggestion);
   }
 
   searchField(double fontSize) {

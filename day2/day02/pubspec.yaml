@@ -40,6 +40,7 @@ dependencies:
   http: ^1.1.0
   mockito: ^5.4.2
   flutter_typeahead: ^4.6.2
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:
