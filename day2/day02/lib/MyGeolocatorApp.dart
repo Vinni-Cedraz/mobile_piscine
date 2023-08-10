@@ -29,7 +29,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
 
   _updateLastSearchText(
       Map<String, String> searchText, String suggestion) async {
-    List<String> parts = suggestion.split(' ');
+    List<String> parts = suggestion.split(RegExp(r'\s+'));
 
     String name = parts[0];
     String admin1 = parts.length == 3 ? parts[1] : '';
