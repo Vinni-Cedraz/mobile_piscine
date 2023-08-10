@@ -5,6 +5,21 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert'; // Import for json decoding
 
+class LastSearchText {
+  final Map<String, String> lastSearchText = {
+    'currently': '',
+    'today': '',
+    'weekly': '',
+  };
+
+  LastSearchText(String suggestion) {
+    lastSearchText['currently'] = suggestion;
+    lastSearchText['today'] = suggestion;
+    lastSearchText['weekly'] = suggestion;
+  }
+  Map<String, String> get updatedSearchText => lastSearchText;
+}
+
 class AutosuggestionsFromGeocodingApi {
   final Function(Map<String, String>) updateLastSearchText;
   final double fontSize;
@@ -13,6 +28,12 @@ class AutosuggestionsFromGeocodingApi {
     required this.updateLastSearchText,
     required this.fontSize,
   });
+
+  void onSuggestionSelected(String suggestion) {
+    Map<String, String> updatedSearchText =
+        LastSearchText(suggestion).updatedSearchText;
+    updateLastSearchText(updatedSearchText);
+  }
 
   searchField(double fontSize) {
     return TypeAheadField(
@@ -27,7 +48,13 @@ class AutosuggestionsFromGeocodingApi {
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         ),
       ),
-      suggestionsCallback: _fetchSuggestions,
+      suggestionsCallback: (String input) async {
+        final suggestions = await _fetchSuggestions(input);
+        if (suggestions.length == 1) {
+          onSuggestionSelected(suggestions.first);
+        }
+        return suggestions;
+      },
       itemBuilder: (context, suggestion) {
         return Card(
           child: Container(
@@ -37,37 +64,30 @@ class AutosuggestionsFromGeocodingApi {
           ),
         );
       },
-      onSuggestionSelected: (suggestion) {
-        Map<String, String> updatedSearchText = {
-          'currently': suggestion,
-          'today': suggestion,
-          'weekly': suggestion,
-        };
-        updateLastSearchText(updatedSearchText);
-      },
+      onSuggestionSelected: onSuggestionSelected,
     );
   }
 }
 
-Future<Iterable<dynamic>> _fetchSuggestions(String query) async {
-  if (query.length >= 3) {
-    final apiUrl =
-        Uri.parse('https://geocoding-api.open-meteo.com/v1/search?name=$query');
+Future<Iterable<String>> _fetchSuggestions(String query) async {
+  if (query.length < 3) return [];
 
+  final apiUrl =
+      Uri.parse('https://geocoding-api.open-meteo.com/v1/search?name=$query');
+
+  try {
     final response = await http.get(apiUrl);
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final List<dynamic> results = data['results'];
-
-      final suggestions = results
-          .map((result) =>
-              '${result['name']} ${result['admin1']} ${result['country']}')
-          .toList();
-
-      return suggestions;
+      final List<dynamic> results = json.decode(response.body)['results'];
+      return results.map((result) =>
+          '${result['name']}\t${result['admin1'] ?? ''}\t${result['country']}');
+    } else {
+      return ['${LastSearchText('API error').updatedSearchText['today']}'];
     }
+  } catch (e) {
+    return [
+      '${LastSearchText('Invalid City Name').updatedSearchText['today']}'
+    ];
   }
-
-  return []; // Return an empty list when there are no suggestions
 }

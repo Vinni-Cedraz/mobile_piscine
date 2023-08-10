@@ -27,13 +27,13 @@ class MiddleBarViews {
       children: [
         TabContent(
             content:
-                '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCurrently\n\n${lastSearchText['currently'] ?? ''}'),
+                'Currently\n${lastSearchText['currently'] ?? ''}'),
         TabContent(
             content:
-                '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tToday\n\n${lastSearchText['today'] ?? ''}'),
+                'Today\n${lastSearchText['today'] ?? ''}'),
         TabContent(
             content:
-                '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tWeekly\n\n${lastSearchText['weekly'] ?? ''}'),
+                'Weekly\n${lastSearchText['weekly'] ?? ''}'),
       ],
     );
   }
