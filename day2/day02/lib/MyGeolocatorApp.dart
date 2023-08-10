@@ -29,7 +29,6 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
 
   _updateLastSearchText(
       Map<String, String> searchText, String suggestion) async {
-    String suggestion = "John Doe California";
     List<String> parts = suggestion.split(' ');
 
     String name = parts[0];
