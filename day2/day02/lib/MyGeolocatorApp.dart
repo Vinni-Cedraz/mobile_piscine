@@ -20,7 +20,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     'weekly': "",
   };
 
-  _updateLastSearchTextByName(
+  _updateLastSearchTextByCityName(
       Map<String, String> searchText, String suggestion) async {
     lastSearchText = LastSearchText(suggestion).updatedSearchText;
 
@@ -33,7 +33,6 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
         await DeterminePosition(name: name, admin1: admin1, country: country)
             .determinePosition();
 
-    print('\n\n\n\n\nposition AFTER: $position\n\n\n\n\n');
     try {
       final List<String> weatherToday = await WeatherByLocation(
               latitude: position!.latitude, longitude: position!.longitude)
@@ -76,7 +75,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   }
 
   _updateLastSearchTextByCurrentLocation() async {
-    position ??= await DeterminePosition().determinePosition();
+    position = await DeterminePosition().determinePosition();
 
     try {
       final List<String> weatherToday = await WeatherByLocation(
@@ -122,6 +121,6 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   Widget build(BuildContext context) => TabControllerGeoApp(
         lastSearchText: lastSearchText,
         updatePosition: _updateLastSearchTextByCurrentLocation,
-        updateLastSearchText: _updateLastSearchTextByName,
+        updateLastSearchText: _updateLastSearchTextByCityName,
       ).tabController;
 }

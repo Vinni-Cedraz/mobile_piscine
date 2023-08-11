@@ -74,10 +74,6 @@ class DeterminePosition {
                 result['admin1'] == admin1 &&
                 result['country'] == country ||
             result['name'] == name && result['country'] == country) {
-          print('\n\n\n\nfound a match!:');
-          print('${result['name']}\n\n\n\n');
-          print('${result['admin1']}\n\n\n\n');
-          print('${result['country']}\n\n\n\n');
           final latitude = result['latitude'];
           final longitude = result['longitude'];
           myPosition = MyPosition(latitude: latitude, longitude: longitude);
