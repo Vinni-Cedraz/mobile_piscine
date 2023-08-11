@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, avoid_print
 
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'TabControllerGeoApp.dart';
 import 'ModuleForWeatherApi.dart';
@@ -13,22 +12,18 @@ class MyGeolocatorApp extends StatefulWidget {
 }
 
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
-  Position? position;
+  MyPosition? position;
 
   Map<String, String> lastSearchText = {
-    'currently': "Current weather text goes here...",
-    'today': "Today's weather text goes here...",
-    'weekly': "Weekly weather text goes here...",
+    'currently': "",
+    'today': "",
+    'weekly': "",
   };
 
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-  }
-
-  _updateLastSearchText(
+  _updateLastSearchTextByName(
       Map<String, String> searchText, String suggestion) async {
+    lastSearchText = LastSearchText(suggestion).updatedSearchText;
+
     List<String> parts = suggestion.split(RegExp(r'\s+'));
 
     String name = parts[0];
@@ -38,12 +33,14 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
         await DeterminePosition(name: name, admin1: admin1, country: country)
             .determinePosition();
 
+    print('\n\n\n\n\nposition AFTER: $position\n\n\n\n\n');
     try {
       final List<String> weatherToday = await WeatherByLocation(
               latitude: position!.latitude, longitude: position!.longitude)
           .fetchTodayWeather();
       setState(() {
-        lastSearchText['today'] = weatherToday.join('\n');
+        lastSearchText['today'] =
+            '${lastSearchText['today'] ?? ''}\n${weatherToday.join('\n')}';
       });
     } catch (e) {
       setState(() {
@@ -56,12 +53,11 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
               latitude: position!.latitude, longitude: position!.longitude)
           .fetchWeekWeather();
       setState(() {
-        lastSearchText['weekly'] = weeklyWeather.join('\n');
+        lastSearchText['weekly'] =
+            '${lastSearchText['weekly'] ?? ''}\n${weeklyWeather.join('\n')}';
       });
     } catch (e) {
-      setState(() {
-        lastSearchText['weekly'] = e.toString();
-      });
+      setState(() {});
     }
 
     try {
@@ -69,7 +65,8 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
               latitude: position!.latitude, longitude: position!.longitude)
           .fetchCurrentWeather();
       setState(() {
-        lastSearchText['currently'] = currentWeather.join('\n');
+        lastSearchText['currently'] =
+            '${lastSearchText['currently'] ?? ''}\n${currentWeather.join('\n')}';
       });
     } catch (e) {
       setState(() {
@@ -78,7 +75,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     }
   }
 
-  _getCurrentLocation() async {
+  _updateLastSearchTextByCurrentLocation() async {
     position ??= await DeterminePosition().determinePosition();
 
     try {
@@ -124,7 +121,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   @override
   Widget build(BuildContext context) => TabControllerGeoApp(
         lastSearchText: lastSearchText,
-        updatePosition: _getCurrentLocation,
-        updateLastSearchText: _updateLastSearchText,
+        updatePosition: _updateLastSearchTextByCurrentLocation,
+        updateLastSearchText: _updateLastSearchTextByName,
       ).tabController;
 }

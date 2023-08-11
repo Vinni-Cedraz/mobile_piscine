@@ -1,10 +1,17 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print
 
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert'; // Import for json decoding
+
+class MyPosition {
+  double latitude;
+  double longitude;
+
+  MyPosition({required this.latitude, required this.longitude});
+}
 
 class LastSearchText {
   final Map<String, String> lastSearchText = {
@@ -28,7 +35,7 @@ class DeterminePosition {
 
   DeterminePosition({this.name, this.admin1, this.country});
 
-  Future<Position> determinePosition() async {
+  Future<MyPosition> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -51,6 +58,8 @@ class DeterminePosition {
     }
 
     dynamic position = await Geolocator.getCurrentPosition();
+    MyPosition myPosition =
+        MyPosition(latitude: position.latitude, longitude: position.longitude);
 
     if (name != null && admin1 != null && country != null) {
       final apiUrl = Uri.parse(
@@ -62,18 +71,22 @@ class DeterminePosition {
 
       for (final result in results) {
         if (result['name'] == name &&
-            result['admin1'] == admin1 &&
-            result['country'] == country) {
+                result['admin1'] == admin1 &&
+                result['country'] == country ||
+            result['name'] == name && result['country'] == country) {
+          print('\n\n\n\nfound a match!:');
+          print('${result['name']}\n\n\n\n');
+          print('${result['admin1']}\n\n\n\n');
+          print('${result['country']}\n\n\n\n');
           final latitude = result['latitude'];
           final longitude = result['longitude'];
-          position.longitude = longitude;
-          position.latitude = latitude;
+          myPosition = MyPosition(latitude: latitude, longitude: longitude);
           break;
         }
       }
-      return position!; // Return the determined position here
+      return myPosition; // Return the determined position here
     }
-    return position!;
+    return myPosition;
   }
 }
 
