@@ -39,7 +39,7 @@ class TopRowWidgetsState extends State<TopRowWidgets> {
   Widget build(BuildContext context) {
     double screenSize =
         MediaQuery.of(context).size.height * MediaQuery.of(context).size.width;
-    double fontSize = screenSize * 0.00005;
+    double fontSize = screenSize * 0.000035;
     return Row(
       children: [
         Expanded(
