@@ -15,7 +15,7 @@ class WeatherByLocation {
 
   fetchTodayWeather() async {
     final apiUrl = Uri.parse(
-        'https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&hourly=temperature_2m,windspeed_10m&current_weather=true&forecast_days=1');
+        'https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&hourly=windspeed_10m,weathercode,temperature_2m&current_weather=true&timezone=auto&forecast_days=1');
     final response = await http.get(apiUrl);
 
     if (response.statusCode == 200) {
@@ -26,7 +26,9 @@ class WeatherByLocation {
           List.generate(hourly['time'].length, (index) {
         final rawTime = hourly['time'][index];
         final formattedTime = rawTime.substring(rawTime.indexOf('T') + 1);
-        return '$formattedTime\t\t\t\t\t\t\t\t${hourly['temperature_2m'][index]}°C\t\t\t\t\t\t\t\t${hourly['windspeed_10m'][index]}km/h';
+        final String weatherDescription =
+            WeatherCodeInterpretation(hourly['weathercode'][index]).getter();
+        return '$formattedTime\t\t\t\t\t\t\t\t${hourly['temperature_2m'][index]}°C\t\t\t\t\t\t\t\t${hourly['windspeed_10m'][index]}km/h\t\t\t\t\t\t\t\t$weatherDescription';
       });
 
       return weatherToday;
@@ -66,7 +68,9 @@ class WeatherByLocation {
       final data = json.decode(response.body);
       final current = data['current_weather'];
 
-        return ['${current['temperature']}°C\n${current['windspeed']} km/h'];
+      return [
+        '${current['temperature']}°C\n${current['windspeed']} km/h\n${WeatherCodeInterpretation(current['weathercode']).getter()}'
+      ];
     }
     return []; // Return an empty list when there are no weatherToday
   }

@@ -14,11 +14,7 @@ class MyGeolocatorApp extends StatefulWidget {
 class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   MyPosition? position;
 
-  Map<String, String> lastSearchText = {
-    'currently': "",
-    'today': "",
-    'weekly': "",
-  };
+   Map<String, String> lastSearchText = LastSearchText('').updatedSearchText;
 
   _updateLastSearchTextByCityName(
       Map<String, String> searchText, String suggestion) async {
@@ -29,9 +25,12 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     String name = parts[0];
     String admin1 = parts.length == 3 ? parts[1] : '';
     String country = parts[parts.length - 1];
-    position =
-        await DeterminePosition(name: name, admin1: admin1, country: country)
-            .determinePosition();
+    position = await DeterminePosition(
+            name: name,
+            admin1: admin1,
+            country: country,
+            lastSearchText: lastSearchText)
+        .determinePosition();
 
     try {
       final List<String> weatherToday = await WeatherByLocation(
@@ -81,7 +80,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   }
 
   _updateLastSearchTextByCurrentLocation() async {
-    position = await DeterminePosition().determinePosition();
+    position = await DeterminePosition(lastSearchText: lastSearchText).determinePosition();
     final cityName = await getCityName(position!.latitude, position!.longitude);
     lastSearchText = LastSearchText(cityName).lastSearchText;
 

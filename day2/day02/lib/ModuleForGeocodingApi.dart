@@ -9,12 +9,13 @@ import 'dart:convert'; // Import for json decoding
 
 getCityName(double latitude, double longitude) async {
   try {
-    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latitude, longitude);
     String? cityName = placemarks.first.administrativeArea;
-		String? pais = placemarks.first.country;
-		return '$cityName $pais';
+    String? pais = placemarks.first.country;
+    return '$cityName $pais';
   } catch (e) {
-    return("Error: $e");
+    return ("Error: $e");
   }
 }
 
@@ -26,7 +27,7 @@ class MyPosition {
 }
 
 class LastSearchText {
-  final Map<String, String> lastSearchText = {
+  final lastSearchText = {
     'currently': '',
     'today': '',
     'weekly': '',
@@ -37,15 +38,17 @@ class LastSearchText {
     lastSearchText['today'] = suggestion;
     lastSearchText['weekly'] = suggestion;
   }
-  Map<String, String> get updatedSearchText => lastSearchText;
+  get updatedSearchText => lastSearchText;
 }
 
 class DeterminePosition {
   final String? name;
   final String? admin1;
   final String? country;
+  Map<String, String> lastSearchText;
 
-  DeterminePosition({this.name, this.admin1, this.country});
+  DeterminePosition(
+      {this.name, this.admin1, this.country, required this.lastSearchText});
 
   Future<MyPosition> determinePosition() async {
     bool serviceEnabled;
@@ -77,20 +80,32 @@ class DeterminePosition {
       final apiUrl = Uri.parse(
           'https://geocoding-api.open-meteo.com/v1/search?name=$name&count=10&language=en&format=json');
 
-      final response = await http.get(apiUrl);
+      try {
+        final response = await http.get(apiUrl);
 
-      final List<dynamic> results = json.decode(response.body)['results'];
-
-      for (final result in results) {
-        if (result['name'] == name &&
-                result['admin1'] == admin1 &&
-                result['country'] == country ||
-            result['name'] == name && result['country'] == country) {
-          final latitude = result['latitude'];
-          final longitude = result['longitude'];
-          myPosition = MyPosition(latitude: latitude, longitude: longitude);
-          break;
+        if (!response.body.contains('results')) {
+          lastSearchText =
+              LastSearchText('Invalid City Name').updatedSearchText;
+          return myPosition;
         }
+
+        if (response.statusCode == 200) {
+          final List<dynamic> results = json.decode(response.body)['results'];
+
+          for (final result in results) {
+            if (result['name'] == name &&
+                    result['admin1'] == admin1 &&
+                    result['country'] == country ||
+                result['name'] == name && result['country'] == country) {
+              final latitude = result['latitude'];
+              final longitude = result['longitude'];
+              myPosition = MyPosition(latitude: latitude, longitude: longitude);
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        lastSearchText = LastSearchText('API error').updatedSearchText;
       }
       return myPosition;
     }
@@ -118,7 +133,7 @@ class AutosuggestionsFromGeocodingApi {
       textFieldConfiguration: TextFieldConfiguration(
         onSubmitted: (String input) async {
           final suggestions = await _fetchSuggestions(input);
-            onSuggestionSelected(suggestions.first);
+          onSuggestionSelected(suggestions.first);
         },
         autofocus: true,
         style: TextStyle(fontSize: fontSize),
@@ -159,17 +174,18 @@ Future<Iterable<String>> _fetchSuggestions(String query) async {
 
   try {
     final response = await http.get(apiUrl);
-
+    if (!response.body.contains('results')) {
+      return [
+        '${LastSearchText('Invalid City Name').updatedSearchText['today']}'
+      ];
+    }
     if (response.statusCode == 200) {
       final List<dynamic> results = json.decode(response.body)['results'];
       return results.map((result) =>
           '${result['name']}\t${result['admin1'] ?? ''}\t${result['country']}');
-    } else {
-      return ['${LastSearchText('API error').updatedSearchText['today']}'];
     }
   } catch (e) {
-    return [
-      '${LastSearchText('Invalid City Name').updatedSearchText['today']}'
-    ];
+    return ['${LastSearchText('API error').updatedSearchText['today']}'];
   }
+  return [];
 }
