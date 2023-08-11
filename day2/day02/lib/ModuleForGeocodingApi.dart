@@ -45,10 +45,10 @@ class DeterminePosition {
   final String? name;
   final String? admin1;
   final String? country;
-  Map<String, String> lastSearchText;
+  Function(String lastSearchText) updateLastSearchTextError;
 
   DeterminePosition(
-      {this.name, this.admin1, this.country, required this.lastSearchText});
+      {this.name, this.admin1, this.country, required this.updateLastSearchTextError});
 
   Future<MyPosition> determinePosition() async {
     bool serviceEnabled;
@@ -84,8 +84,7 @@ class DeterminePosition {
         final response = await http.get(apiUrl);
 
         if (!response.body.contains('results')) {
-          lastSearchText =
-              LastSearchText('Invalid City Name').updatedSearchText;
+              updateLastSearchTextError(LastSearchText('Invalid City Name').updatedSearchText);
           return myPosition;
         }
 
@@ -105,7 +104,7 @@ class DeterminePosition {
           }
         }
       } catch (e) {
-        lastSearchText = LastSearchText('API error').updatedSearchText;
+        updateLastSearchTextError(LastSearchText('API error').updatedSearchText);
       }
       return myPosition;
     }

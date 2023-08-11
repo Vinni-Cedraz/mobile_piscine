@@ -16,6 +16,12 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
 
    Map<String, String> lastSearchText = LastSearchText('').updatedSearchText;
 
+	 void _updateLastSearchTextError(String error) {
+    setState(() {
+      lastSearchText = LastSearchText(error).updatedSearchText;
+    });
+  }
+
   _updateLastSearchTextByCityName(
       Map<String, String> searchText, String suggestion) async {
     lastSearchText = LastSearchText(suggestion).updatedSearchText;
@@ -29,7 +35,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
             name: name,
             admin1: admin1,
             country: country,
-            lastSearchText: lastSearchText)
+            updateLastSearchTextError: _updateLastSearchTextError)
         .determinePosition();
 
     try {
@@ -80,7 +86,7 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
   }
 
   _updateLastSearchTextByCurrentLocation() async {
-    position = await DeterminePosition(lastSearchText: lastSearchText).determinePosition();
+    position = await DeterminePosition(updateLastSearchTextError: _updateLastSearchTextError).determinePosition();
     final cityName = await getCityName(position!.latitude, position!.longitude);
     lastSearchText = LastSearchText(cityName).lastSearchText;
 
