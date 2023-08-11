@@ -74,6 +74,12 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _updateLastSearchTextByCurrentLocation();
+  }
+
   _updateLastSearchTextByCurrentLocation() async {
     position = await DeterminePosition().determinePosition();
 

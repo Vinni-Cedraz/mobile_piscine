@@ -104,6 +104,10 @@ class AutosuggestionsFromGeocodingApi {
   searchField(double fontSize) {
     return TypeAheadField(
       textFieldConfiguration: TextFieldConfiguration(
+        onSubmitted: (String input) async {
+          final suggestions = await _fetchSuggestions(input);
+            onSuggestionSelected(suggestions.first);
+        },
         autofocus: true,
         style: TextStyle(fontSize: fontSize),
         decoration: const InputDecoration(
