@@ -2,9 +2,21 @@
 
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:geocoding/geocoding.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert'; // Import for json decoding
+
+getCityName(double latitude, double longitude) async {
+  try {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+    String? cityName = placemarks.first.administrativeArea;
+		String? pais = placemarks.first.country;
+		return '$cityName $pais';
+  } catch (e) {
+    return("Error: $e");
+  }
+}
 
 class MyPosition {
   double latitude;
@@ -80,7 +92,7 @@ class DeterminePosition {
           break;
         }
       }
-      return myPosition; // Return the determined position here
+      return myPosition;
     }
     return myPosition;
   }

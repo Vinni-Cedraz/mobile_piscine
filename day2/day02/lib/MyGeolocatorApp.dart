@@ -82,13 +82,20 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
 
   _updateLastSearchTextByCurrentLocation() async {
     position = await DeterminePosition().determinePosition();
+    final cityName = await getCityName(position!.latitude, position!.longitude);
+    lastSearchText = LastSearchText(cityName).lastSearchText;
+
+    print('\n\n\n\n\n\n\n');
+    print('CITYNAME: $cityName');
+    print('\n\n\n\n\n\n\n');
 
     try {
       final List<String> weatherToday = await WeatherByLocation(
               latitude: position!.latitude, longitude: position!.longitude)
           .fetchTodayWeather();
       setState(() {
-        lastSearchText['today'] = weatherToday.join('\n');
+        lastSearchText['today'] =
+            '${lastSearchText['today'] ?? ''}\n${weatherToday.join('\n')}';
       });
     } catch (e) {
       setState(() {
@@ -101,7 +108,8 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
               latitude: position!.latitude, longitude: position!.longitude)
           .fetchWeekWeather();
       setState(() {
-        lastSearchText['weekly'] = weeklyWeather.join('\n');
+        lastSearchText['weekly'] =
+            '${lastSearchText['weekly'] ?? ''}\n${weeklyWeather.join('\n')}';
       });
     } catch (e) {
       setState(() {
@@ -114,7 +122,8 @@ class _MyGeolocatorAppState extends State<MyGeolocatorApp> {
               latitude: position!.latitude, longitude: position!.longitude)
           .fetchCurrentWeather();
       setState(() {
-        lastSearchText['currently'] = currentWeather.join('\n');
+        lastSearchText['currently'] =
+            '${lastSearchText['currently'] ?? ''}\n${currentWeather.join('\n')}';
       });
     } catch (e) {
       setState(() {
